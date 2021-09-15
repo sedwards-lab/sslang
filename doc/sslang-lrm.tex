@@ -134,27 +134,27 @@ Top Level Definition Grammar
 
   TOPDEF ::= ID: TYPE = { BODY }            -- Global var
            | ID() -> TYPE = { BODY }        -- Void function
-	   | ID PARAM_T+ -> TYPE = { BODY } -- 'Inline' type signature
-	   | ID PARAM_T+ : TYPE = { BODY }  -- 'Postfix functional' type signature
+           | ID PARAM_T+ -> TYPE = { BODY } -- 'Inline' type signature
+           | ID PARAM_T+ : TYPE = { BODY }  -- 'Postfix functional' type signature
 
   PARAM_T ::= ID               -- Haskell-style, only param name
             | (PARAM)          -- OCaml-style, param wrapped in parens for typing
-	    | (PARAM(,PARAM)+) -- Tuple, think Python
+            | (PARAM(,PARAM)+) -- Tuple, think Python
 
   PARAM ::= (PARAM)		       -- Unwrap parens
-	  | ID(: TYPE)?                -- Optionally typed identifier
-	  | (PARAM(,PARAM)+) (: TYPE)? -- Optionally typed tuple
+          | ID(: TYPE)?                -- Optionally typed identifier
+          | (PARAM(,PARAM)+) (: TYPE)? -- Optionally typed tuple
 
   TYPE ::= [TYPE]
-	 | TYPE -> TYPE
-	 | (TYPE)
-	 | (TYPE(,TYPE)+)
-	 | Int8 | Int16 | Int32 | Int64
-	 | UInt8 | UInt16 | UInt32 | UInt64
-	 | Bool
-	 | Event
-	 | TYPE&        -- TODO: Figure out Ref syntax
-	 | Sched (TYPE) -- TODO: Figure out Sched syntax
+         | TYPE -> TYPE
+         | (TYPE)
+         | (TYPE(,TYPE)+)
+         | Int8 | Int16 | Int32 | Int64
+         | UInt8 | UInt16 | UInt32 | UInt64
+         | Bool
+         | Event
+         | TYPE&        -- TODO: Figure out Ref syntax
+         | Sched (TYPE) -- TODO: Figure out Sched syntax
 
 ---
 
