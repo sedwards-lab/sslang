@@ -105,61 +105,58 @@ so ugly. Whatever syntax we use, declaration for follow invocation.
 
 \begin{verbatim}
 
--- () -> Int
-e () -> Int = ..
-
+e () -> Int = ..       -- Void function
 ----
-
-f a: Int = ..
-f (a: Int): Int = ..
-
-f(1)
-f 1
-
-f a: Int -> Int = ..   -- PL
-f (a: Int) -> Int = .. -- Python, Rust, Typescript
-
-func f (a int) int {
-}
-
-f a -> Int = ..
-f (a: Int) -> Int = ..
-
+f a: Int -> Int = ..   -- Interpret as '(Int -> Int) is the type of f'
+f (a: Int) -> Int = .. -- Interpret as 'a is of type Int and f returns Int'
 ----
 
 -- g: (Int, Int) -> Int
 
-g (a: Int, b: Int) -> Int = ...
+g (a: Int, b: Int) -> Int = .. -- Looks Pythonic, but g actually takes 1 tuple arg
 
-g ((a, b): (Int, Int)) -> Int = ...
+g ((a, b): (Int, Int)) -> Int = ... -- OCaml-like
 
-g (a, b): (Int, Int) -> Int = ...
-
-g: (Int, Int) -> Int = \(a, b) = ...
+g (a, b): (Int, Int) -> Int = ... -- Interpret as '(Int, Int) -> Int is the type of g'
 
 ----
 
 -- h: Int -> Int -> Int
 
-h a b: Int -> Int -> Int = ...
+h a b: Int -> Int -> Int = ... -- 'Int -> Int -> Int is the type of h'
 
-h: Int -> Int -> Int = \a = \b = ...
+h: Int -> Int -> Int = \a = \b = ...  -- OK, if single ID, then expect colon, like global var
 
-h (a: Int) (b: Int) -> Int = ...
-
-----
-Beginnings of a grammar:
-
-  FUNCDEF ::= ID PATTERN* -> TYPE = { BODY }
-            | ID PATTERN* :  TYPE = { BODY }
-
-  PATTERN ::= ID (: TYPE)?
-
-  TYPE ::= [ TYPE ]
-         | ID
-         | ...
+h (a: Int) (b: Int) -> Int = ... -- OK, should parse, OCaml-like 
 
 ----
+Top Level Definition Grammar
+
+  TOPDEF ::= ID: TYPE = { BODY }            -- Global var
+           | ID() -> TYPE = { BODY }        -- Void function
+	   | ID PARAM_T+ -> TYPE = { BODY } -- 'Inline' type signature
+	   | ID PARAM_T+ : TYPE = { BODY }  -- 'Postfix functional' type signature
+
+  PARAM_T ::= ID               -- Haskell-style, only param name
+            | (PARAM)          -- OCaml-style, param wrapped in parens for typing
+	    | (PARAM(,PARAM)+) -- Tuple, think Python
+
+  PARAM ::= (PARAM)		       -- Unwrap parens
+	  | ID(: TYPE)?                -- Optionally typed identifier
+	  | (PARAM(,PARAM)+) (: TYPE)? -- Optionally typed tuple
+
+  TYPE ::= [TYPE]
+	 | TYPE -> TYPE
+	 | (TYPE)
+	 | (TYPE(,TYPE)+)
+	 | Int8 | Int16 | Int32 | Int64
+	 | UInt8 | UInt16 | UInt32 | UInt64
+	 | Bool
+	 | Event
+	 | TYPE&        -- TODO: Figure out Ref syntax
+	 | Sched (TYPE) -- TODO: Figure out Sched syntax
+
+---
 
 TODO for Hans:
 - syntax for types and top-level name definitions
