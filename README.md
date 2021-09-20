@@ -1,6 +1,6 @@
 # sslang
 
-**NOTE: Development for this project has moved to [ssm-lang/sslang](http://www.github.com/ssm-lang/sslang).**
+**NOTE: Development for this project has moved to [ssm-lang/sslang](https://www.github.com/ssm-lang/sslang).**
 
 ----
 
